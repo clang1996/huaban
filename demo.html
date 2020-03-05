@@ -20,9 +20,28 @@
         canvas.height = document.documentElement.clientHeight
         ctx.fillStyle = "black";
         ctx.strokeStyle = "none";
+        ctx.lineWidth = "4";
+        ctx.lineCap = "round";
+
+        
+
+
+
+        function drawLine(x1, y1, x2, y2) {
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.closePath();
+            ctx.stroke();
+            console.log('11111')
+        }
 
         let painting = false
-        //  抄'ontouchstart'手误'onTouchstart'导致手机画不出图,console.log('111')调试后修正
+        // 声明一个last变量
+        let last
+
+        //  抄'ontouchstart'手误'onTouchstart',console.log('111')调试后修正
         var isTouchDevice = 'ontouchstart' in
             document.documentElement;
         if (isTouchDevice) {
@@ -36,15 +55,18 @@
                 ctx.fill();
             }
         } else {
-            canvas.onmousedown = () => {
+            canvas.onmousedown = (e) => {
                 painting = true
+                // 关键代码1,第一个点
+                last = [e.clientX, e.clientY]
             }
-            canvas.onmousemove = (x) => {
+            canvas.onmousemove = (e) => {
                 if (painting === true) {
-                    ctx.beginPath();
-                    ctx.arc(x.clientX, x.clientY, 10, 0, 2 * Math.PI);
-                    ctx.stroke();
-                    ctx.fill();
+                    console.log('111')
+                    // 关键代码2，
+                    drawLine(last[0], last[1], e.clientX, e.clientY)
+                    // 关键代码3
+                    last = [e.clientX, e.clientY]
                 }
 
             }
